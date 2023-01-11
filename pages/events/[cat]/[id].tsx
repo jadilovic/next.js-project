@@ -2,13 +2,22 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 
-const SingleEvent = ({ data }) => {
+  type Event = {
+  id: string,
+  title: string,
+  city: string,
+  description: string,
+  image: string,
+  emails_registered: []
+}
+
+const SingleEvent = ({ data }: {data: Event}) => {
   const [emailValue, setEmailValue] = useState("");
   const [message, setMessage] = useState("");
   const router = useRouter();
   // const emailValidationRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
-  const onSubmit = async (e) => {
+  const onSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     const eventId = router?.query.id;
 
