@@ -7,13 +7,22 @@ type Data = {
   message: string
 }
 
+type Event = {
+  id: string,
+  title: string,
+  city: string,
+  description: string,
+  image: string,
+  emails_registered: []
+}
+
 function buildPath() {
   return path.join(process.cwd(), 'data', 'data.json');
 }
 
 function extractData(filePath: string) {
   const jsonData = fs.readFileSync(filePath);
-  const data = JSON.parse(jsonData);
+  const data = JSON.parse(jsonData.toString());
   return data;
 }
 
@@ -39,9 +48,10 @@ export default function handler(
         res.status(422).json({message: "Email is not valid"})
       }
 
-      const newAllEvents = allEvents.map((event) => {
+      const newAllEvents = allEvents.map((event: Event) => {
         if (event.id === eventId) {
-          if (event.emails_registered.includes(email)) {
+          const registeredEmails: Array<string> = event.emails_registered;
+            if (registeredEmails.includes(email)) {
             res.status(409).json({message: "This email has been registered"});
             return event;
           }
